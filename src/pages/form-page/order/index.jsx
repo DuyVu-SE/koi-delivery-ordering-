@@ -1,6 +1,6 @@
 import { Button, Form, Input, InputNumber, Select, Checkbox } from "antd";
 import { Option } from "antd/es/mentions";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../../../config/axios";
@@ -9,24 +9,50 @@ import FormLayout from "../../../components/layout/layout-form";
 function OrderForm() {
   const [isPlaneDelivery, setIsPlaneDelivery] = useState(false);
   const navigate = useNavigate();
+  const [deliveryMethod, setDeliveryMethod] = useState([]);
   const [form] = Form.useForm();
 
+  const fetchDelivery = async () => {
+    try {
+      const response = await api.get("/delivery-method/view-all");
+      console.log(response.data.result); // Log dữ liệu trả về
+      setDeliveryMethod(response.data.result);
+    } catch (error) {
+      toast.error(error);
+    }
+  };
   const handleDeliveryMethodChange = (value) => {
-    setIsPlaneDelivery(value === "Plane");
+    setIsPlaneDelivery(value.toUpperCase() === "PLANE");
   };
 
   const handleSubmitOrder = async (values) => {
     try {
       const token = localStorage.getItem("token");
+      const dataToSubmit = {
+        deliveryMethod: values.deliveryMethod,
+        destination: values.destination,
+        departure: values.departure,
+        distance: values.distance,
+        phone: values.phone,
+        amount: values.amount,
+        vat: values.vat,
+        vatAmount: values.vatAmount,
+        totalAmount: values.totalAmount,
+        customsDeclaration: values.customsDeclaration ? "true" : "false",
+      };
 
-      const response = await api.post("order/create", values, {
+      const response = await api.post("order/create", dataToSubmit, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log(response);
+
+      console.log("Data to submit:", dataToSubmit);
+
       const orderId = response.data.result.id;
       localStorage.setItem("orderId", orderId);
       toast.success("Đặt hàng thành công!");
       if (values.customsDeclaration) {
-        navigate(`/customs-declaration/${orderId}`);
+        navigate(`/form-declaration/${orderId}`);
       } else {
         navigate(`/fish-profile/${orderId}`);
       }
@@ -36,27 +62,34 @@ function OrderForm() {
     }
   };
 
+  useEffect(() => {
+    fetchDelivery();
+  }, []);
   return (
     <FormLayout>
       <Form form={form} onFinish={handleSubmitOrder} layout="vertical">
         <Form.Item
-          label="Phương Thức Giao Hàng"
           name="deliveryMethod"
+          label="Delivery Method"
           rules={[
             {
               required: true,
-              message: "Vui lòng chọn phương thức giao hàng!",
+              message: "Please select a delivery method!",
             },
           ]}
         >
           <Select
-            placeholder="Chọn phương thức giao hàng"
+            placeholder="Select delivery method"
             onChange={handleDeliveryMethodChange}
           >
-            <Option value="Van">Van</Option>
-            <Option value="Plane">Plane</Option>
-            <Option value="Boat">Boat</Option>
-            <Option value="Train">Train</Option>
+            {deliveryMethod.map((delivery) => (
+              <Select.Option
+                key={delivery.id}
+                value={delivery.deliveryMethodName}
+              >
+                {delivery.deliveryMethodName}
+              </Select.Option>
+            ))}
           </Select>
         </Form.Item>
 
@@ -67,57 +100,109 @@ function OrderForm() {
         )}
 
         <Form.Item
-          label="Địa Điểm"
+          label="Destination"
           name="destination"
-          rules={[{ required: true, message: "Vui lòng nhập địa điểm!" }]}
+          rules={[{ required: true, message: "Please enter the destination!" }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="Điểm Khởi Hành"
+          label="Departure"
           name="departure"
-          rules={[{ required: true, message: "Vui lòng nhập điểm khởi hành!" }]}
+          rules={[{ required: true, message: "Please enter the departure!" }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="Khoảng Cách (km)"
+          label="Distance"
           name="distance"
           rules={[
+            { required: true, message: "Please enter the distance!" },
             {
-              required: true,
-              message: "Vui lòng nhập khoảng cách!",
               type: "number",
               min: 0,
+              message: "Distance must be a positive number!",
             },
           ]}
         >
-          <InputNumber min={0} style={{ width: "100%" }} />
+          <InputNumber min={0} />
         </Form.Item>
 
         <Form.Item
-          label="Số Điện Thoại"
+          label="Phone"
           name="phone"
-          rules={[{ required: true, message: "Vui lòng nhập số điện thoại!" }]}
+          rules={[
+            { required: true, message: "Please enter the phone number!" },
+            {
+              pattern: /^[0-9]{10}$/,
+              message: "Phone number must be 10 digits!",
+            },
+          ]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label="Số Tiền"
+          label="Amount"
           name="amount"
           rules={[
+            { required: true, message: "Please enter the amount!" },
             {
-              required: true,
-              message: "Vui lòng nhập số tiền!",
               type: "number",
               min: 0,
+              message: "Amount must be a positive number!",
             },
           ]}
         >
-          <InputNumber min={0} style={{ width: "100%" }} />
+          <InputNumber min={0} step={0.01} />
+        </Form.Item>
+
+        <Form.Item
+          label="VAT (%)"
+          name="vat"
+          rules={[
+            { required: true, message: "Please enter the VAT percentage!" },
+            {
+              type: "number",
+              min: 0,
+              max: 100,
+              message: "VAT must be between 0 and 100!",
+            },
+          ]}
+        >
+          <InputNumber min={0} max={100} step={0.01} />
+        </Form.Item>
+
+        <Form.Item
+          label="VAT Amount"
+          name="vatAmount"
+          rules={[
+            { required: true, message: "Please enter the VAT amount!" },
+            {
+              type: "number",
+              min: 0,
+              message: "VAT amount must be a positive number!",
+            },
+          ]}
+        >
+          <InputNumber min={0} step={0.01} />
+        </Form.Item>
+
+        <Form.Item
+          label="Total Amount"
+          name="totalAmount"
+          rules={[
+            { required: true, message: "Please enter the total amount!" },
+            {
+              type: "number",
+              min: 0,
+              message: "Total amount must be a positive number!",
+            },
+          ]}
+        >
+          <InputNumber min={0} step={0.01} />
         </Form.Item>
 
         <Form.Item>
