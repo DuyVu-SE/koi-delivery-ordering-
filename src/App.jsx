@@ -14,15 +14,18 @@ import About from "./components/about";
 import Contact from "./components/contact";
 import Support from "./components/support";
 import ServiceDetail from "./components/detail-service";
-import ServiceList from "./components/list-service/service-delivery";
-import Dashboard from "./components/dashboard/dashboard-admin";
-import ManageHealthService from "./pages/dashboard/admin/manage-health-service";
-import FormLayout from "./components/layout/layout-form";
-import OrderForm from "./pages/form-page/order";
+import FeedbackPage from "./pages/feedback-page";
+import SuccessPage from "./pages/success-page";
 import CustomsDeclarationForm from "./pages/form-page/declaration";
-import FishProfileForm from "./pages/form-page/fishProfile";
 import HealthService from "./pages/form-page/healthService";
 import CertificateForm from "./pages/form-page/certificate";
+import FishProfileForm from "./pages/form-page/fishProfile";
+import OrderForm from "./pages/form-page/order";
+import FormLayout from "./components/layout/layout-form";
+import ManageHealthService from "./pages/dashboard/admin/manage-health-service";
+import Dashboard from "./components/dashboard/dashboard-admin";
+import ServiceList from "./components/list-service/service-delivery";
+import PaymentConfirmation from "./pages/pay-page";
 
 function App() {
   const ProtectRouterAuth = ({ children }) => {
@@ -123,6 +126,31 @@ function App() {
     {
       path: "check",
       element: <HealthCheckForm />,
+    },
+    {
+      path: "pay",
+      element: (
+        <div>
+          <PaymentConfirmation />
+        </div>
+      ),
+    },
+    {
+      path: "paysuccess",
+      element: (
+        <div>
+          <SuccessPage />
+        </div>
+      )
+    },
+
+    {
+      path: "feedback",
+      element: (
+        <div>
+          <FeedbackPage />
+        </div>
+      ),
     },
   ]);
 

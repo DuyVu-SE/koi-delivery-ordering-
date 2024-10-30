@@ -1,8 +1,7 @@
-import React from "react";
+//import React from "react";
 import { Layout, Row, Col, Typography, Space } from "antd";
 import {
   FacebookOutlined,
-  TwitterOutlined,
   InstagramOutlined,
   TikTokOutlined,
 } from "@ant-design/icons";
