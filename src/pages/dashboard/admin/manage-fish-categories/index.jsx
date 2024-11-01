@@ -10,6 +10,7 @@ function ManageFishCategory() {
       key: "fishCategoryName",
       render: (text) => <span>{text}</span>,
     },
+
     {
       title: "Description",
       dataIndex: "fishCategoryDescription",
