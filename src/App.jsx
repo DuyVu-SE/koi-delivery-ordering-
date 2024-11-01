@@ -26,6 +26,7 @@ import ManageHealthService from "./pages/dashboard/admin/manage-health-service";
 import Dashboard from "./components/dashboard/dashboard-admin";
 import ServiceList from "./components/list-service/service-delivery";
 import PaymentConfirmation from "./pages/pay-page";
+import ProfileCustomer from "./pages/profile-customer";
 
 function App() {
   const ProtectRouterAuth = ({ children }) => {
@@ -127,6 +128,12 @@ function App() {
       path: "check",
       element: <HealthCheckForm />,
     },
+
+    {
+      path: "profile-cus",
+      element: < ProfileCustomer />,
+    },
+
     {
       path: "pay",
       element: (
