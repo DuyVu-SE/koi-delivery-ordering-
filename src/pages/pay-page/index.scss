@@ -1,36 +1,27 @@
-// .ant-form {
-//   max-width: 400px;
-//   margin: 0 auto;
-// }
+.payment-confirmation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f9f9f9;
+}
 
-// .ant-form-item {
-//   margin-bottom: 16px;
-//   display: flex;
-//   align-items: center;
-// }
+.form-container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 50%;
+    max-width: 600px;
+    min-height: 300px;
+}
 
-// .ant-form-item label {
-//   width: 165px;
-//   text-align: right;
-//   margin-right: 16px;
-// }
+.form-group {
+    margin-bottom: 15px;
+}
 
-// .ant-form-item input {
-//   width: 300px;
-// }
-
-// .payment-method-form {
-//   //display: block;
-//   width: 200px;
-// }
-
-// .payment-method-form .ant-checkbox-wrapper {
-//   //display: block;
-//   margin-bottom: 16px;
-// }
-
-// .error-message {
-//   color: red;
-//   font-size: 12px;
-//   margin-top: 4px;
-// }
+.error-message {
+    color: red;
+    margin-top: 10px;
+}

@@ -1,6 +1,6 @@
 import { Button, Result } from "antd";
 
-function SuccessPage() {
+function PaymentSuccess() {
     return (
         <div>
             <Result
@@ -20,4 +20,4 @@ function SuccessPage() {
 
 }
 
-export default SuccessPage;
+export default PaymentSuccess;
