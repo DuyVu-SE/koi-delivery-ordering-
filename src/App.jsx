@@ -32,6 +32,9 @@ import DashboardStaff from "./components/dashboard/dashboard-staff";
 import DashboardManager from "./components/dashboard/dashboard-manager";
 import OrderDetail from "./pages/form-page/orderDetail";
 import ManageOrder from "./pages/dashboard/manager/manage-order";
+import PaymentConfirmation from "./pages/pay-page";
+import ProfileCustomer from "./pages/profile-customer";
+import PaymentSuccess from "./pages/success-page";
 
 function App() {
   const ProtectRouterAuth = ({ children }) => {
@@ -179,9 +182,28 @@ function App() {
     },
 
     {
+      path: "pay",
+      element: <PaymentConfirmation />,
+    },
+
+    {
+      path: "payment-success",
+      element: <PaymentSuccess />,
+    },
+
+    {
+      path: "feedback",
+    },
+
+    {
       path: "check",
       element: <HealthCheckForm />,
     },
+
+    {
+      path: "profile-cus",
+      element: <ProfileCustomer />,
+    }
   ]);
 
   return <RouterProvider router={router} />;
